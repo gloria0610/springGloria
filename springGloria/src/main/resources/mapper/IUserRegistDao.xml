@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.learn.springgloria.dao.regist.IUserRegistDAO">
+    <resultMap id="userMap" type="com.learn.springgloria.model.User">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="telephone" column="telephone"/>
+        <result property="accountId" column="accountId"/>
+        <result property="registTime" column="regist_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <!--<select id="insertOrUpdateUserBasic" resultMap="userMap">-->
+        <!--SELECT * FROM user_basic;-->
+    <!--</select>-->
+
+    <!-- creater：gloria -->
+    <!-- 描述：插入或更新用户信息，如果不存在，则插入，否则，更新update_time。 -->
+    <!-- 预计：  qps<100    日访问量<10W   -->
+    <!-- 前台访问：是   -->
+    <insert id="insertOrUpdateUserBasic" parameterType="User">
+        insert into user_basic
+        (id, username, password, email,telephone,accountId,regist_time,update_time,status)
+        values (#{id},#{username},#{password},#{email},#{telephone},#{accountId},NOW(),NOW(),#{status})
+        ON DUPLICATE KEY UPDATE update_time=NOW();
+    </insert>
+</mapper>
